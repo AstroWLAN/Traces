@@ -24,7 +24,7 @@ struct StrokeOutline : ViewModifier {
                 Rectangle()
                     .foregroundStyle(color)
                     .mask(maskShape(context: content))
-                    .shadow(color: Color(.systemGray4), radius: 2)
+                    .shadow(color: Color(.black).opacity(0.5), radius: 2)
                     .drawingGroup()
             )
     }
@@ -53,9 +53,6 @@ struct Main: View {
             }
             Tab("Digits", systemImage: "function") {
                 Digits()
-            }
-            Tab("Shapes", systemImage: "hexagon") {
-                Shapes()
             }
             Tab("Research", systemImage: "brain.filled.head.profile") {
                 Research()

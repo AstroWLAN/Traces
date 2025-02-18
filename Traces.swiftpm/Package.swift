@@ -24,13 +24,10 @@ let package = Package(
             accentColor: .presetColor(.blue),
             supportedDeviceFamilies: [
                 .pad,
-                .phone
             ],
             supportedInterfaceOrientations: [
-                .portrait,
                 .landscapeRight,
-                .landscapeLeft,
-                .portraitUpsideDown(.when(deviceFamilies: [.pad]))
+                .landscapeLeft
             ],
             appCategory: .education
         )

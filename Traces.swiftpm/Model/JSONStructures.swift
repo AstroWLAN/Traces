@@ -4,17 +4,17 @@
 
 import Foundation
 
-// Details regarding a letter of the alphabet
-struct LetterJSON : Decodable, Identifiable, Hashable {
+// Represents a parsed letter of the alphabet
+struct ParsedLetter : Decodable, Identifiable, Hashable {
     let id : UUID = UUID()
+    var emoji : String
     var letter : String
     var word : String
-    var emoji : String
     
     enum CodingKeys: CodingKey {
+        case emoji
         case letter
         case word
-        case emoji
     }
     
     init(from decoder: Decoder) throws {
@@ -24,23 +24,23 @@ struct LetterJSON : Decodable, Identifiable, Hashable {
         self.word = try container.decode(String.self, forKey: .word)
     }
     
-    // Mock initializer -> used when the JSON decoding process fails
+    // Mock initializer
     init () {
-        self.emoji = "🔥"
-        self.letter = "?"
-        self.word = "Error"
+        self.emoji = "❓"
+        self.letter = String()
+        self.word = "Missing"
     }
 }
 
-// Parses and decodes the JSON content from the file that contains the alphabet information
-func parseLetterJSON(fileName : String) -> [LetterJSON]? {
+// Parses the content of the JSON file that contains the alphabet information
+func parseAlphabetJSON(fileName : String) -> [ParsedLetter]? {
     let jsonDecoder = JSONDecoder()
     guard let dataURL = Bundle.main.url(forResource: fileName, withExtension: "json"),
           let fileData = try? Data(contentsOf: dataURL),
-          let parsedInformation = try? jsonDecoder.decode([LetterJSON].self, from: fileData)
+          let parsedAlphabet = try? jsonDecoder.decode([ParsedLetter].self, from: fileData)
     else {
         debugPrint("Something went wrong with the JSON decoding process 🔥")
         return nil
     }
-    return parsedInformation
+    return parsedAlphabet
 }
