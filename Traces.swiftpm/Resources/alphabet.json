@@ -1,132 +1,106 @@
 [
     {
-        "emoji": "🍏",
         "letter": "a",
         "word": "Apple"
     },
     {
-        "emoji": "🩰",
         "letter": "b",
         "word": "Ballet"
     },
     {
-        "emoji": "🍪",
         "letter": "c",
         "word": "Cookie"
     },
     {
-        "emoji": "🦕",
         "letter": "d",
         "word": "Dinosaur"
     },
     {
-        "emoji": "📨",
         "letter": "e",
         "word": "Envelope"
     },
     {
-        "emoji": "🏈",
         "letter": "f",
         "word": "Football"
     },
     {
-        "emoji": "🍇",
         "letter": "g",
-        "word": "Grape"
+        "word": "Giraffe"
     },
     {
-        "emoji": "🌭",
         "letter": "h",
-        "word": "Hotdog"
+        "word": "Horse"
     },
     {
-        "emoji": "🇮🇹",
         "letter": "i",
-        "word": "Italy"
+        "word": "Ice"
     },
     {
-        "emoji": "🪼",
         "letter": "j",
         "word": "Jellyfish"
     },
     {
-        "emoji": "🐨",
         "letter": "k",
         "word": "Koala"
     },
     {
-        "emoji": "🦁",
         "letter": "l",
         "word": "Lion"
     },
     {
-        "emoji": "🧲",
         "letter": "m",
-        "word": "Melody"
+        "word": "Mouse"
     },
     {
-        "emoji": "🌱",
         "letter": "n",
         "word": "Nature"
     },
     {
-        "emoji": "🐙",
         "letter": "o",
         "word": "Octopus"
     },
     {
-        "emoji": "🥜",
         "letter": "p",
         "word": "Peanuts"
     },
     {
-        "emoji": "👑",
         "letter": "q",
         "word": "Queen"
     },
     {
-        "emoji": "🌈",
         "letter": "r",
         "word": "Rainbow"
     },
     {
-        "emoji": "🪐",
         "letter": "s",
         "word": "Space"
     },
     {
-        "emoji": "🍵",
         "letter": "t",
-        "word": "Teacup"
+        "word": "Time"
     },
     {
-        "emoji": "☂️",
         "letter": "u",
-        "word": "Umbrella"
+        "word": "Ufo"
     },
     {
-        "emoji": "🥬",
         "letter": "v",
-        "word": "Vegetable"
+        "word": "Volcano"
     },
     {
-        "emoji": "🐳",
         "letter": "w",
         "word": "Whale"
     },
     {
-        "emoji": "🩻",
         "letter": "x",
         "word": "X-Ray"
     },
     {
-        "emoji": "🪀",
         "letter": "y",
         "word": "Yoyo"
     },
     {
-        "emoji": "🍋",
         "letter": "z",
-        "word": "Zest"
+        "word": "Zombie"
     }
 ]

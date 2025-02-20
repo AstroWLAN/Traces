@@ -1,0 +1,15 @@
+{
+  "originHash" : "bcb084c149149ba643a0972da25f8b683607d86b035813b1dccae4a3adbf4f6f",
+  "pins" : [
+    {
+      "identity" : "popups",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Mijick/Popups",
+      "state" : {
+        "revision" : "62457a91042e8ef68615fd8d2d27eb8240d2cd5b",
+        "version" : "4.0.1"
+      }
+    }
+  ],
+  "version" : 3
+}

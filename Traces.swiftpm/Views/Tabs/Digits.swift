@@ -27,7 +27,7 @@ struct Digits: View {
 struct Number : View {
     private let digits : [Int : String] = [0:"Zero", 1:"One", 2:"Two", 3:"Three", 4:"Four", 5:"Five", 6:"Six", 7:"Seven", 8:"Eight", 9:"Nine"]
     @State var currentDigit : Int
-    @State private var selectedDigit : Int = 0
+    @State private var selectedDigit : String = String()
     var body: some View {
         ZStack {
             Image(digits[currentDigit] ?? "Missing")
@@ -46,5 +46,10 @@ struct Number : View {
         .background(Color(.systemGray6))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(color: Color(.systemGray5), radius: 2)
+        .onTapGesture {
+            // Displays the popup
+            selectedDigit = String(currentDigit)
+            Task { await AlphabetPopup(letter: $selectedDigit).present() }
+        }
     }
 }

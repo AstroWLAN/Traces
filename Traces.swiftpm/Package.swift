@@ -23,7 +23,7 @@ let package = Package(
             appIcon: .asset("AppIcon"),
             accentColor: .presetColor(.blue),
             supportedDeviceFamilies: [
-                .pad,
+                .pad
             ],
             supportedInterfaceOrientations: [
                 .landscapeRight,
@@ -32,9 +32,15 @@ let package = Package(
             appCategory: .education
         )
     ],
+    dependencies: [
+        .package(url: "https://github.com/Mijick/Popups", "4.0.1"..<"5.0.0")
+    ],
     targets: [
         .executableTarget(
             name: "AppModule",
+            dependencies: [
+                .product(name: "MijickPopups", package: "popups")
+            ],
             path: ".",
             resources: [
                 .process("Resources")

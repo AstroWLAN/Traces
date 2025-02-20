@@ -3,6 +3,7 @@
 // Created by Dario Crippa on 17/02/25
 
 import SwiftUI
+import MijickPopups
 
 struct Alphabet: View {
     // Parsed letters of the alphabet
@@ -54,5 +55,17 @@ struct Letter : View {
         .background(Color(.systemGray6))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(color: Color(.systemGray4), radius: 3)
+        .onTapGesture {
+            // Displays the popup
+            selectedLetter = parsedLetter.letter
+            Task { await AlphabetPopup(letter: $selectedLetter).present() }
+        }
+    }
+}
+
+struct AlphabetPopup: CenterPopup {
+    @Binding var letter : String
+    var body: some View {
+        LetterSheet(glyph: $letter)
     }
 }

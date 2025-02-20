@@ -7,26 +7,22 @@ import Foundation
 // Represents a parsed letter of the alphabet
 struct ParsedLetter : Decodable, Identifiable, Hashable {
     let id : UUID = UUID()
-    var emoji : String
     var letter : String
     var word : String
     
     enum CodingKeys: CodingKey {
-        case emoji
         case letter
         case word
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.emoji = try container.decode(String.self, forKey: .emoji)
         self.letter = try container.decode(String.self, forKey: .letter)
         self.word = try container.decode(String.self, forKey: .word)
     }
     
     // Mock initializer
     init () {
-        self.emoji = "❓"
         self.letter = String()
         self.word = "Missing"
     }
