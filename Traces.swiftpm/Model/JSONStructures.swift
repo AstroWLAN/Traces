@@ -40,3 +40,40 @@ func parseAlphabetJSON(fileName : String) -> [ParsedLetter]? {
     }
     return parsedAlphabet
 }
+
+// Represents a parsed letter of the alphabet
+struct ParsedParagraph : Decodable, Identifiable, Hashable {
+    let id : UUID = UUID()
+    var paragraph : String
+    var content : String
+    
+    enum CodingKeys: CodingKey {
+        case paragraph
+        case content
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.paragraph = try container.decode(String.self, forKey: .paragraph)
+        self.content = try container.decode(String.self, forKey: .content)
+    }
+    
+    // Mock initializer
+    init () {
+        self.paragraph = "Unkown"
+        self.content = "Missing content"
+    }
+}
+
+// Parses the content of the JSON file that contains the alphabet information
+func parseParagraphsJSON(fileName : String) -> [ParsedParagraph]? {
+    let jsonDecoder = JSONDecoder()
+    guard let dataURL = Bundle.main.url(forResource: fileName, withExtension: "json"),
+          let fileData = try? Data(contentsOf: dataURL),
+          let parsedParagraphs = try? jsonDecoder.decode([ParsedParagraph].self, from: fileData)
+    else {
+        debugPrint("Something went wrong with the JSON decoding process 🔥")
+        return nil
+    }
+    return parsedParagraphs
+}

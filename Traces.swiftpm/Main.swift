@@ -46,6 +46,8 @@ struct StrokeOutline : ViewModifier {
 
 struct Main: View {
     @State private var parsedAlphabet : [ParsedLetter]?
+    @State private var parsedParagraphs : [ParsedParagraph]?
+    @StateObject private var appState = AppState()
     var body: some View {
         TabView {
             Tab("Alphabet", systemImage: "textformat") {
@@ -55,13 +57,16 @@ struct Main: View {
                 Digits()
             }
             Tab("Research", systemImage: "brain.filled.head.profile") {
-                Research()
+                Research(paragraphs: $parsedParagraphs)
             }
         }
         .tabViewStyle(.tabBarOnly)
         .onAppear {
             // Loads and parses the alphabet data from 'alphabet.json' file
             parsedAlphabet = parseAlphabetJSON(fileName: "alphabet") ?? [ParsedLetter()]
+            parsedParagraphs = parseParagraphsJSON(fileName: "handwriting") ?? [ParsedParagraph()]
         }
+        // Inject AppState into the environment for all child views
+        .environmentObject(appState)
     }
 }

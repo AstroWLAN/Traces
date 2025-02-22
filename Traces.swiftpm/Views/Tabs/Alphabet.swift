@@ -66,6 +66,7 @@ struct Letter : View {
 struct AlphabetPopup: CenterPopup {
     @Binding var letter : String
     var body: some View {
-        LetterSheet(glyph: $letter)
+        HandwritingSheet(glyph: $letter)
+            .environmentObject(AppState())
     }
 }

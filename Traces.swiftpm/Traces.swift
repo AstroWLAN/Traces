@@ -17,7 +17,7 @@ struct Traces: App {
                 .registerPopups(id: .shared) { popupConfiguration in
                     popupConfiguration
                         .center { $0
-                            .tapOutsideToDismissPopup(true)
+                            .tapOutsideToDismissPopup(false)
                             .backgroundColor(.clear)
                             .overlayColor(Color(.black).opacity(0.85))
                         }

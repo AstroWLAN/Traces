@@ -12,51 +12,52 @@ enum caseForm: String, CaseIterable, Equatable {
     case majuscule
 }
 
-struct LetterSheet: View {
+struct HandwritingSheet: View {
     @Binding var glyph: String
     @State private var selectedCase: caseForm = .minuscule
-    @State private var dismiss : Bool = false
+    @EnvironmentObject private var appState: AppState
     var body: some View {
         ZStack {
             // Background
             Color(.systemGray6)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
             // Sheet content
-            VStack {
-                HStack(alignment: .center) {
-                    Spacer()
-                    // Letter-case picker
-                    Picker(String(), selection: $selectedCase) {
-                        ForEach(caseForm.allCases, id: \.self) { style in
-                            Text(style.rawValue.capitalized).tag(style)
-                        }
-                    }
-                    .fixedSize()
-                    .pickerStyle(SegmentedPickerStyle())
-                    .opacity(isGlyphDigit($glyph) ? 0 : 1)
-                    Spacer()
-                }
-                .padding(.top, 10)
-                .overlay {
-                    HStack {
-                        Spacer()
-                        // Sheet close button
-                        Button(action: {
-                            dismiss = true
-                            Task { await dismissAllPopups() }
-                        }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .symbolRenderingMode(.hierarchical)
-                                .foregroundStyle(Color.secondary)
-                                .font(.system(.title2))
-                        }
-                        .padding(.trailing, 10)
-                    }
-                }
-                Spacer()
+            ZStack {
                 // Handwriting canvas
-                HandwritingCanvas(symbol: $glyph, selectedForm: $selectedCase, dismiss: $dismiss)
-                Spacer()
+                HandwritingCanvas(symbol: $glyph, selectedForm: $selectedCase)
+                VStack {
+                    HStack(alignment: .center) {
+                        Spacer()
+                        // Letter-case picker
+                        Picker(String(), selection: $selectedCase) {
+                            ForEach(caseForm.allCases, id: \.self) { style in
+                                Text(style.rawValue.capitalized).tag(style)
+                            }
+                        }
+                        .fixedSize()
+                        .pickerStyle(SegmentedPickerStyle())
+                        .opacity(isGlyphDigit($glyph) ? 0 : 1)
+                        Spacer()
+                    }
+                    .padding(.top, 10)
+                    .overlay {
+                        HStack {
+                            Spacer()
+                            // Sheet close button
+                            Button(action: {
+                                appState.canvasFirstResponder.toggle()
+                                Task { await dismissAllPopups() }
+                            }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .symbolRenderingMode(.hierarchical)
+                                    .foregroundStyle(Color.secondary)
+                                    .font(.system(.title2))
+                            }
+                            .padding(.trailing, 10)
+                        }
+                    }
+                    Spacer()
+                }
             }
             .background(Color(.white))
             .clipShape(RoundedRectangle(cornerRadius: 16))
@@ -72,7 +73,6 @@ struct HandwritingCanvas : View {
     @Binding var selectedForm : caseForm
     // Creiamo un'istanza del canvas dove disegneremo
     @State private var canvasView = PKCanvasView()
-    @Binding var dismiss : Bool
     
     // Tool picker è l'interfaccia che permette di selezionare gli strumenti di disegno
     @State private var toolPicker = PKToolPicker()
@@ -94,7 +94,8 @@ struct HandwritingCanvas : View {
                 }
             }
             .padding(80)
-            DrawingView(canvasView: $canvasView, toolPicker: $toolPicker, dismiss: $dismiss)
+            DrawingView(canvasView: $canvasView, toolPicker: $toolPicker)
+                .environmentObject(AppState())
         }
     }
 }
@@ -104,7 +105,7 @@ struct DrawingView: UIViewRepresentable {
     // @Binding permette di ricevere riferimenti modificabili dalle proprietà
     @Binding var canvasView: PKCanvasView
     @Binding var toolPicker: PKToolPicker
-    @Binding var dismiss: Bool
+    @EnvironmentObject private var appState: AppState
     
     // Questa funzione viene chiamata quando la vista viene creata
     func makeUIView(context: Context) -> PKCanvasView {
@@ -120,6 +121,7 @@ struct DrawingView: UIViewRepresentable {
         toolPicker.addObserver(canvasView)
         
         // Facciamo diventare il canvas il first responder per ricevere gli input
+        appState.canvasFirstResponder.toggle()
         canvasView.becomeFirstResponder()
         return canvasView
     }
@@ -127,7 +129,7 @@ struct DrawingView: UIViewRepresentable {
     // Questa funzione viene chiamata quando la vista deve essere aggiornata
     // Al momento non abbiamo bisogno di aggiornamenti specifici
     func updateUIView(_ uiView: PKCanvasView, context: Context) {
-        if dismiss == true {
+        if appState.canvasFirstResponder == false {
             canvasView.resignFirstResponder()
         }
     }
@@ -145,4 +147,3 @@ func isGlyphDigit(_ glyph: Binding<String>) -> Bool {
     // Check if the number is between 0 and 9
     return (0...9).contains(intValue)
 }
-
