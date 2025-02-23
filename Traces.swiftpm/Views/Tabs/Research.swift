@@ -41,7 +41,7 @@ struct Research: View {
                         Spacer()
                         // Sheet close button
                         Button(action: {
-                            
+                            Task { await DevelopmentPopup().present() }
                         }) {
                             Image(systemName: "info.circle.fill")
                                 .symbolRenderingMode(.hierarchical)
@@ -108,3 +108,10 @@ struct ResearchInformation: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
+
+struct DevelopmentPopup: CenterPopup {
+    var body: some View {
+        Development()
+    }
+}
+

@@ -77,3 +77,43 @@ func parseParagraphsJSON(fileName : String) -> [ParsedParagraph]? {
     }
     return parsedParagraphs
 }
+
+// Details regarding something of the app -> third party packages and fonts
+struct ParsedResource : Decodable, Identifiable, Hashable {
+    let id : UUID = UUID()
+    var name : String
+    var source : String
+    var description : String
+    
+    enum CodingKeys: CodingKey {
+        case name
+        case source
+        case description
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.source = try container.decode(String.self, forKey: .source)
+        self.description = try container.decode(String.self, forKey: .description)
+    }
+    
+    // Mock initializer -> used when the JSON decoding process fails
+    init () {
+        self.name = "Error"
+        self.source = "Uknown"
+        self.description = "Something went wrong with the JSON decoding process 🔥"
+    }
+}
+
+func parseResourcesJSON(fileName : String) -> [ParsedResource]? {
+    let jsonDecoder = JSONDecoder()
+    guard let dataURL = Bundle.main.url(forResource: fileName, withExtension: "json"),
+          let fileData = try? Data(contentsOf: dataURL),
+          let parsedResources = try? jsonDecoder.decode([ParsedResource].self, from: fileData)
+    else {
+        debugPrint("Something went wrong with the JSON decoding process 🔥")
+        return nil
+    }
+    return parsedResources
+}
