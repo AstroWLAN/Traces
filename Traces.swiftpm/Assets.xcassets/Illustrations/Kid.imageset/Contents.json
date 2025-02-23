@@ -3,6 +3,16 @@
     {
       "filename" : "watercolor-cartoonish-representation-of-a-child-wi-10.png",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Dark.jpg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

@@ -45,11 +45,10 @@ struct Number : View {
         }
         .background(Color(.systemGray6))
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: Color(.systemGray5), radius: 2)
+        .shadow(color: Color(.systemGray4), radius: 3)
         .onTapGesture {
-            // Displays the popup
             selectedDigit = String(currentDigit)
-            Task { await AlphabetPopup(letter: $selectedDigit).present() }
+            Task { await HandwritingPopup(glyph: $selectedDigit).present() }
         }
     }
 }

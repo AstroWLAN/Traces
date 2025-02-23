@@ -5,7 +5,7 @@
 import Foundation
 
 // Represents a parsed letter of the alphabet
-struct ParsedLetter : Decodable, Identifiable, Hashable {
+struct LetterJSON : Decodable, Identifiable, Hashable {
     let id : UUID = UUID()
     var letter : String
     var word : String
@@ -29,11 +29,11 @@ struct ParsedLetter : Decodable, Identifiable, Hashable {
 }
 
 // Parses the content of the JSON file that contains the alphabet information
-func parseAlphabetJSON(fileName : String) -> [ParsedLetter]? {
+func parseAlphabetJSON(fileName : String) -> [LetterJSON]? {
     let jsonDecoder = JSONDecoder()
     guard let dataURL = Bundle.main.url(forResource: fileName, withExtension: "json"),
           let fileData = try? Data(contentsOf: dataURL),
-          let parsedAlphabet = try? jsonDecoder.decode([ParsedLetter].self, from: fileData)
+          let parsedAlphabet = try? jsonDecoder.decode([LetterJSON].self, from: fileData)
     else {
         debugPrint("Something went wrong with the JSON decoding process 🔥")
         return nil
@@ -44,23 +44,23 @@ func parseAlphabetJSON(fileName : String) -> [ParsedLetter]? {
 // Represents a parsed letter of the alphabet
 struct ParsedParagraph : Decodable, Identifiable, Hashable {
     let id : UUID = UUID()
-    var paragraph : String
+    var title : String
     var content : String
     
     enum CodingKeys: CodingKey {
-        case paragraph
+        case title
         case content
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.paragraph = try container.decode(String.self, forKey: .paragraph)
+        self.title = try container.decode(String.self, forKey: .title)
         self.content = try container.decode(String.self, forKey: .content)
     }
     
     // Mock initializer
     init () {
-        self.paragraph = "Unkown"
+        self.title = "Unkown"
         self.content = "Missing content"
     }
 }

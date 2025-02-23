@@ -22,6 +22,14 @@ struct Traces: App {
                             .overlayColor(Color(.black).opacity(0.85))
                         }
                 }
+                .registerPopups(id: .init(rawValue: "pdf")) { popupConfiguration in
+                    popupConfiguration
+                        .center { $0
+                            .tapOutsideToDismissPopup(true)
+                            .backgroundColor(.clear)
+                            .overlayColor(Color(.black).opacity(0.85))
+                        }
+                }
         }
     }
 }

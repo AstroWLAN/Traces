@@ -1,4 +1,4 @@
-// Alphabet.swift : practicing handwriting with letters
+// Alphabet.swift
 // Traces
 // Created by Dario Crippa on 17/02/25
 
@@ -7,7 +7,7 @@ import MijickPopups
 
 struct Alphabet: View {
     // Parsed letters of the alphabet
-    @Binding var alphabet : [ParsedLetter]?
+    @Binding var alphabet : [LetterJSON]?
     
     // Grid structure
     private let gridColumns = Array(repeating: GridItem(.flexible(minimum: 6), spacing: 0), count: 6)
@@ -17,7 +17,7 @@ struct Alphabet: View {
             ScrollView {
                 // Grid layout to visualize all the alphabet letters in an organized manner
                 LazyVGrid(columns: gridColumns, alignment: .center, spacing: 40) {
-                    ForEach(alphabet ?? [ParsedLetter()], id: \.self) { letter in
+                    ForEach(alphabet ?? [LetterJSON()], id: \.self) { letter in
                         Letter(parsedLetter: letter)
                     }
                 }
@@ -29,7 +29,7 @@ struct Alphabet: View {
 }
 
 struct Letter : View {
-    @State var parsedLetter : ParsedLetter
+    @State var parsedLetter : LetterJSON
     @State private var selectedLetter : String = String()
     var body: some View {
         ZStack {
@@ -44,6 +44,7 @@ struct Letter : View {
                     Text(parsedLetter.letter)
                 }
                 .font(.custom("Playwrite", size: 22))
+                .foregroundStyle(Color(.black))
                 .outline(color: .white, width: 2)
                 Text(parsedLetter.word)
                     .font(.custom("Playwrite", size: 17))
@@ -58,15 +59,15 @@ struct Letter : View {
         .onTapGesture {
             // Displays the popup
             selectedLetter = parsedLetter.letter
-            Task { await AlphabetPopup(letter: $selectedLetter).present() }
+            Task { await HandwritingPopup(glyph: $selectedLetter).present() }
         }
     }
 }
 
-struct AlphabetPopup: CenterPopup {
-    @Binding var letter : String
+struct HandwritingPopup: CenterPopup {
+    @Binding var glyph : String
     var body: some View {
-        HandwritingSheet(glyph: $letter)
+        HandwritingSheet(trace: $glyph)
             .environmentObject(AppState())
     }
 }

@@ -13,7 +13,7 @@ enum caseForm: String, CaseIterable, Equatable {
 }
 
 struct HandwritingSheet: View {
-    @Binding var glyph: String
+    @Binding var trace: String
     @State private var selectedCase: caseForm = .minuscule
     @EnvironmentObject private var appState: AppState
     var body: some View {
@@ -24,7 +24,7 @@ struct HandwritingSheet: View {
             // Sheet content
             ZStack {
                 // Handwriting canvas
-                HandwritingCanvas(symbol: $glyph, selectedForm: $selectedCase)
+                HandwritingCanvas(symbol: $trace, selectedForm: $selectedCase)
                 VStack {
                     HStack(alignment: .center) {
                         Spacer()
@@ -36,7 +36,7 @@ struct HandwritingSheet: View {
                         }
                         .fixedSize()
                         .pickerStyle(SegmentedPickerStyle())
-                        .opacity(isGlyphDigit($glyph) ? 0 : 1)
+                        .opacity(isGlyphDigit($trace) ? 0 : 1)
                         Spacer()
                     }
                     .padding(.top, 10)
@@ -121,15 +121,17 @@ struct DrawingView: UIViewRepresentable {
         toolPicker.addObserver(canvasView)
         
         // Facciamo diventare il canvas il first responder per ricevere gli input
-        appState.canvasFirstResponder.toggle()
-        canvasView.becomeFirstResponder()
+        DispatchQueue.main.async {
+            self.appState.canvasFirstResponder = true // Set directly instead of toggling
+            self.canvasView.becomeFirstResponder()
+        }
         return canvasView
     }
     
     // Questa funzione viene chiamata quando la vista deve essere aggiornata
     // Al momento non abbiamo bisogno di aggiornamenti specifici
     func updateUIView(_ uiView: PKCanvasView, context: Context) {
-        if appState.canvasFirstResponder == false {
+        if !appState.canvasFirstResponder {
             canvasView.resignFirstResponder()
         }
     }

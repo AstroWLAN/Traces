@@ -7,110 +7,104 @@ import PDFKit
 import MijickPopups
 
 struct Research: View {
-    // Parsed letters of the alphabet
-    @Binding var paragraphs: [ParsedParagraph]?
+    // Research information parsed from the file : handwriting.json
+    @Binding var researchContent: [ParsedParagraph]?
     
     var body: some View {
-        HStack(alignment: .center, spacing: 80) {
-            Spacer()
-            ZStack {
-                Color(.systemGray6)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                VStack {
-                    ResearchInformation(paragraphs: $paragraphs)
+        NavigationStack {
+            HStack(alignment: .center, spacing: 60) {
+                Spacer()
+                ZStack {
+                    // Background
+                    Color(.systemGray6)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                    // Visualizes the research information
+                    ResearchInformation(paragraphs: $researchContent)
                         .background(
                             Color.white
                                 .clipShape(RoundedRectangle(cornerRadius: 16))
                                 .shadow(color: Color(.systemGray4), radius: 4)
                         )
+                        .padding(10)
                 }
-                .padding(10)
+                .frame(maxWidth: 550, maxHeight: 650)
+                // Illustration
+                Image("Kid")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 280)
+                Spacer()
             }
-            .frame(maxWidth: 550, maxHeight: 600)
-            
-            // Illustration
-            Image("Handwriting")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 240)
-            Spacer()
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    HStack {
+                        Spacer()
+                        // Sheet close button
+                        Button(action: {
+                            
+                        }) {
+                            Image(systemName: "info.circle.fill")
+                                .symbolRenderingMode(.hierarchical)
+                                .foregroundStyle(Color(.systemBlue))
+                                .font(.system(.title3))
+                        }
+                    }
+                }
+            }
         }
     }
 }
 
 struct ResearchInformation: View {
+    
     @Binding var paragraphs: [ParsedParagraph]?
     
     var body: some View {
-        let firstParagraph = paragraphs?.first ?? ParsedParagraph()
-        return ScrollView {
+        let content = paragraphs ?? [ParsedParagraph()]
+        ScrollView {
             VStack(alignment: .leading, spacing: 5) {
-                Text(firstParagraph.paragraph)
-                    .font(.system(size: 20, weight: .semibold))
-                Text(firstParagraph.content)
-                    .font(.system(size: 17, weight: .regular))
-                    .padding(.bottom, 10)
-                Button(action: {
-                    Task {
-                        await PDFPopup().present()
-                    }
-                }, label: {
-                    HStack {
-                        Label {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("The Importance of Handwriting Experience on the Development of the Literate Brain")
-                                    .font(.headline)
-                                    .bold()
-                                Text("Karin H. James")
-                                    .font(.subheadline)
+                ForEach(Array(content.enumerated()), id: \.element) { index, paragraph in
+                    // Paragraph information
+                    Text(paragraph.title)
+                        .font(.system(size: 20, weight: .bold))
+                    Text(paragraph.content)
+                        .font(.system(size: 17, weight: .regular))
+                    if index == 0 {
+                        // Visualizes the details of the research paper [ author : Karin H.James ]
+                        Button(action: {
+                            print("Tap")
+                        }) {
+                            HStack(alignment: .center, spacing: 16) {
+                                // Title and author of the paper
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("The Importance of Handwriting Experience on the Development of the Literate Brain")
+                                        .font(.system(size: 15, weight: .semibold))
+                                    Text("Karin H. James")
+                                        .font(.system(size: 13, weight: .regular))
+                                }
+                                .multilineTextAlignment(.leading)
+                                Spacer()
+                                // Information about the file
+                                VStack {
+                                    Image(systemName: "text.document.fill")
+                                    Text("PDF")
+                                        .font(.system(size: 13, weight: .bold))
+                                }
                             }
-                        } icon: {
-                            Image(systemName: "text.document.fill")
+                            .padding()
+                            .background {
+                                Color(.systemBlue).opacity(0.1)
+                                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                            }
+                            .foregroundStyle(Color(.systemBlue))
+                            .padding(.vertical, 10)
                         }
-                        Spacer()
+                        .buttonStyle(.plain)
                     }
-                })
-                .buttonStyle(.bordered)
-                .tint(Color(.systemBlue))
-                .padding(.vertical, 10)
+                }
             }
             .padding()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-}
-
-struct PDFViewer: UIViewRepresentable {
-    let url: URL
-    
-    func makeUIView(context: Context) -> PDFKit.PDFView {
-        let pdfView = PDFKit.PDFView()
-        pdfView.autoScales = true
-        
-        if let document = PDFDocument(url: url) {
-            pdfView.document = document
-            print("PDF loaded successfully from: \(url)")
-        } else {
-            print("Error: Unable to load PDF from URL: \(url)")
-        }
-        
-        return pdfView
-    }
-    
-    func updateUIView(_ uiView: PDFKit.PDFView, context: Context) {
-        // Handle updates if needed
-    }
-}
-
-struct PDFPopup: CenterPopup {
-    var body: some View {
-        PDFContentView()
-    }
-}
-
-struct PDFContentView: View {
-    var body: some View {
-        PDFViewer(url: Bundle.main.url(forResource: "handwriting_importance", withExtension: "pdf")!)
-            .frame(width: 640, height: 540)
     }
 }
