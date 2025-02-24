@@ -91,6 +91,7 @@ struct OnBoardingPopup: CenterPopup {
         }
         .frame(width: 380, height: 540)
         .onAppear {
+            // Reads and processes splash information from the 'splash.json' file
             splashInformation = parseSplashJSON(fileName: "splash")
         }
     }

@@ -12,43 +12,37 @@ struct Resources: View {
         List {
             ForEach(Array((parsedResource ?? [ResourceJSON]()).enumerated()), id: \.element) { index, resource in
                 if index != 2 {
-                    // Renders an SF Symbol with a rounded rectangle as its background
-                    HStack(alignment: .firstTextBaseline) {
+                    HStack(alignment: .top, spacing: 10) {
                         ZStack(alignment: .center) {
                             if index == 0 {
                                 RoundedRectangle(cornerRadius: 7.5)
                                     .frame(width: 32, height: 32)
                                     .foregroundStyle(Color("packageBrown"))
                                 Image(systemName: "shippingbox.fill")
-                                    .foregroundStyle(Color(.white))
+                                    .foregroundStyle(Color(.white).opacity(0.75))
                                     .font(.system(size: 20, weight: .regular))
-                            }
-                            else if index == 1 {
+                            } else if index == 1 {
                                 RoundedRectangle(cornerRadius: 7.5)
                                     .frame(width: 32, height: 32)
                                     .foregroundStyle(Color("fontGray"))
                                 Image(systemName: "loupe")
-                                    .foregroundStyle(Color(.white))
+                                    .foregroundStyle(Color(.white).opacity(0.75))
                                     .font(.system(size: 20, weight: .regular))
                             }
                         }
-                        .alignmentGuide(.firstTextBaseline) { dimension in dimension[VerticalAlignment.center] }
-                        // Information about the fonts and the third-party packages
-                        VStack(alignment: .leading, spacing: 5) {
-                            HStack(alignment: .firstTextBaseline) {
-                                VStack(alignment: .leading, spacing: 0) {
-                                    Text("\(resource.name)")
-                                        .font(.system(size: 17, weight: .bold))
-                                    Text("by \(resource.source)")
-                                        .font(.system(size: 12, weight: .semibold))
-                                        .foregroundStyle(Color(.systemGray2))
-                                }
-                                Spacer()
-                            }
+                        // Resource informations
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text("\(resource.name)")
+                                .font(.system(size: 17, weight: .bold))
+                            Text("made with \(resource.source)")
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundStyle(Color(.systemGray2))
+                                .padding(.bottom, 5)
                             Text("\(resource.description)")
                                 .font(.system(size: 15, weight: .regular))
                         }
                     }
+
                 }
             }
             .listRowSeparator(.hidden)

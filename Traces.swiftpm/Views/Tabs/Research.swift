@@ -7,7 +7,7 @@ import PDFKit
 import MijickPopups
 
 struct Research: CenterPopup {
-    // Research information extracted from 'handwriting.json'
+    // Research information extracted from 'research.json'
     @Binding var research: [ResearchParagraphJSON]?
     
     var body: some View {
@@ -63,7 +63,7 @@ struct Research: CenterPopup {
 
 struct ResearchInformation: View {
     
-    // Research information extracted from 'handwriting.json'
+    // Research information extracted from 'research.json'
     @Binding var researchParagraphs: [ResearchParagraphJSON]?
     
     var body: some View {
