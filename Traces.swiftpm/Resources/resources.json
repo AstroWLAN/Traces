@@ -2,7 +2,7 @@
     {
         "name": "Popups",
         "source": "Mijick",
-        "description": "The most powerful popup library that allows you to present any custom popup",
+        "description": "One of the most popular framework on GitHub for custom popup presentation",
     },
     {
         "name": "Playwrite",
@@ -12,6 +12,6 @@
     {
         "name": "Illustrations",
         "source": "Recraft.ai",
-        "description": "All illustrations in this app are created using Recraft, an AI-powered image generator. According to Recraft.ai, both free and paid subscribers can freely use these generated images for personal or commercial endeavors.",
+        "description": "All illustrations in this app are created using Recraft, an AI-powered image generator. According to Recraft.ai, both free and paid subscribers can freely use these generated images for personal or commercial endeavors",
     }
 ]

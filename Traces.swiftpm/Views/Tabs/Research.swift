@@ -6,9 +6,9 @@ import SwiftUI
 import PDFKit
 import MijickPopups
 
-struct Research: View {
-    // Research information parsed from the file : handwriting.json
-    @Binding var researchContent: [ParsedParagraph]?
+struct Research: CenterPopup {
+    // Research information extracted from 'handwriting.json'
+    @Binding var research: [ResearchParagraphJSON]?
     
     var body: some View {
         NavigationStack {
@@ -19,7 +19,7 @@ struct Research: View {
                     Color(.systemGray6)
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                     // Visualizes the research information
-                    ResearchInformation(paragraphs: $researchContent)
+                    ResearchInformation(researchParagraphs: $research)
                         .background(
                             Color.white
                                 .clipShape(RoundedRectangle(cornerRadius: 16))
@@ -28,7 +28,7 @@ struct Research: View {
                         .padding(10)
                 }
                 .frame(maxWidth: 550, maxHeight: 650)
-                // Illustration
+                // Kid illustration
                 Image("Kid")
                     .resizable()
                     .scaledToFit()
@@ -39,14 +39,14 @@ struct Research: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack {
                         Spacer()
-                        // Sheet close button
                         Button(action: {
+                            // Presents the development information popup
                             Task { await DevelopmentPopup().present() }
                         }) {
                             Image(systemName: "info.circle.fill")
                                 .symbolRenderingMode(.hierarchical)
                                 .foregroundStyle(Color(.systemBlue))
-                                .font(.system(.title3))
+                                .font(.system(size: 22, weight: .regular))
                         }
                     }
                 }
@@ -57,25 +57,28 @@ struct Research: View {
 
 struct ResearchInformation: View {
     
-    @Binding var paragraphs: [ParsedParagraph]?
+    // Research information extracted from 'handwriting.json'
+    @Binding var researchParagraphs: [ResearchParagraphJSON]?
     
     var body: some View {
-        let content = paragraphs ?? [ParsedParagraph()]
         ScrollView {
             VStack(alignment: .leading, spacing: 5) {
-                ForEach(Array(content.enumerated()), id: \.element) { index, paragraph in
-                    // Paragraph information
+                ForEach(Array((researchParagraphs ?? [ResearchParagraphJSON()]).enumerated()), id: \.element) { index, paragraph in
+                    // Title
                     Text(paragraph.title)
                         .font(.system(size: 20, weight: .bold))
+                        .padding([.horizontal, .top], 16)
+                    // Content
                     Text(paragraph.content)
                         .font(.system(size: 17, weight: .regular))
+                        .padding(.horizontal, 16)
                     if index == 0 {
-                        // Visualizes the details of the research paper [ author : Karin H.James ]
                         Button(action: {
-                            print("Tap")
+                            // Visualizes the paper
+                            Task { await PDFPopup().present() }
                         }) {
+                            // Paper information
                             HStack(alignment: .center, spacing: 16) {
-                                // Title and author of the paper
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text("The Importance of Handwriting Experience on the Development of the Literate Brain")
                                         .font(.system(size: 15, weight: .semibold))
@@ -84,20 +87,20 @@ struct ResearchInformation: View {
                                 }
                                 .multilineTextAlignment(.leading)
                                 Spacer()
-                                // Information about the file
                                 VStack {
                                     Image(systemName: "text.document.fill")
                                     Text("PDF")
                                         .font(.system(size: 13, weight: .bold))
                                 }
                             }
-                            .padding()
+                            .padding(16)
                             .background {
                                 Color(.systemBlue).opacity(0.1)
                                     .clipShape(RoundedRectangle(cornerRadius: 16))
                             }
                             .foregroundStyle(Color(.systemBlue))
-                            .padding(.vertical, 10)
+                            .padding(.top, 10)
+                            .padding(.bottom, -6)
                         }
                         .buttonStyle(.plain)
                     }
@@ -106,12 +109,6 @@ struct ResearchInformation: View {
             .padding()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-}
-
-struct DevelopmentPopup: CenterPopup {
-    var body: some View {
-        Development()
     }
 }
 

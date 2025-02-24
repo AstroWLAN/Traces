@@ -3,8 +3,10 @@
 //  Created by Dario Crippa on 23/02/25
 
 import SwiftUI
+import MijickPopups
 
-// https://stackoverflow.com/questions/62063972/how-do-i-include-ios-app-icon-image-within-the-app-itself
+// Retrieves the app icon from the assets
+// Based on the answer: https://stackoverflow.com/questions/62063972/how-do-i-include-ios-app-icon-image-within-the-app-itself
 extension Bundle {
     var iconFileName: String? {
         guard let icons = infoDictionary?["CFBundleIcons"] as? [String: Any],
@@ -17,7 +19,7 @@ extension Bundle {
 }
 
 // Retrieves the app version
-// Tutorial : https://www.polpiella.dev/show-app-icon-and-version-in-a-swiftui-view
+// Based on the tutorial: https://www.polpiella.dev/show-app-icon-and-version-in-a-swiftui-view
 func getVersion(bundle : Bundle = .main) -> String {
     guard let version = bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String else {
         fatalError("Something went wrong while retrieving the app version 🔥")
@@ -25,17 +27,17 @@ func getVersion(bundle : Bundle = .main) -> String {
     return version
 }
 
-// Segments available in the details picker
-private enum DetailSegment : String, CaseIterable {
+// Lists the segments available in the development picker
+private enum DevelopmentSegment : String, CaseIterable {
     case illustrations
     case resources
 }
 
-struct Development: View {
-    // DEFAULT selected segment in the picker is .settings
-    @State private var selectedSegment : DetailSegment = .illustrations
-    // Parsed data from the JSON files
-    @State private var resources : [ParsedResource]?
+struct DevelopmentPopup: CenterPopup {
+    // Sets .illustrations as the default selected segment in the picker
+    @State private var selectedSegment : DevelopmentSegment = .illustrations
+    // Resource information extracted from 'resources.json'
+    @State private var resources : [ResourceJSON]?
     var body: some View {
         ZStack {
             // Background
@@ -44,18 +46,16 @@ struct Development: View {
             VStack(spacing: 0) {
                 HStack {
                     Spacer()
-                    // Sheet close button
-                    Button(action: {
-                        Task { await dismissAllPopups() }
-                    }) {
+                    // Dismesses the DevelopmentPopup
+                    Button(action: { Task { await dismissAllPopups() }}) {
                         Image(systemName: "xmark.circle.fill")
                             .symbolRenderingMode(.hierarchical)
                             .foregroundStyle(Color(.systemBlue))
-                            .font(.system(.title2))
+                            .font(.system(size: 22, weight: .regular))
                     }
                     .padding(10)
                 }
-                // App icon
+                // Visualizes the app information
                 Bundle.main.iconFileName
                     .flatMap { UIImage(named: $0) }
                     .map { Image(uiImage: $0) }
@@ -64,21 +64,18 @@ struct Development: View {
                     .clipShape(RoundedRectangle(cornerRadius: 18))
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
                 Text("Traces")
-                    .font(.largeTitle)
-                    .bold()
+                    .font(.system(size: 34, weight: .bold))
                     .padding(.bottom, 5)
                 Text("Version \(getVersion())")
-                    .font(.caption)
-                    .bold()
+                    .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(Color(.systemGray2))
                 Text("Developed by Dario Crippa")
-                    .font(.caption)
-                    .bold()
+                    .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(Color(.systemGray2))
                     .padding(.bottom, 20)
-                // Navigates the details popup subviews
+                // Navigates through the subviews of the details popup
                 Picker(String(), selection: $selectedSegment) {
-                    ForEach(DetailSegment.allCases, id: \.self) { segment in
+                    ForEach(DevelopmentSegment.allCases, id: \.self) { segment in
                         Text(segment.rawValue.capitalized).tag(segment)
                     }
                 }
@@ -103,7 +100,7 @@ struct Development: View {
         }
         .frame(width: 380, height: 540)
         .onAppear {
-            // Decodes the JSON files and initializes data when the Details view appears
+            // Reads and processes the resource information from the 'resources.json' file
             resources = parseResourcesJSON(fileName: "resources")
         }
     }

@@ -48,7 +48,7 @@ struct Number : View {
         .shadow(color: Color(.systemGray4), radius: 3)
         .onTapGesture {
             selectedDigit = String(currentDigit)
-            Task { await HandwritingPopup(glyph: $selectedDigit).present() }
+            Task { await HandwritingSheet(trace: $selectedDigit).present() }
         }
     }
 }

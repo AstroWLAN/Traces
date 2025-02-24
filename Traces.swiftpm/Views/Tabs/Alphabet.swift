@@ -59,15 +59,7 @@ struct Letter : View {
         .onTapGesture {
             // Displays the popup
             selectedLetter = parsedLetter.letter
-            Task { await HandwritingPopup(glyph: $selectedLetter).present() }
+            Task { await HandwritingSheet(trace: $selectedLetter).present() }
         }
-    }
-}
-
-struct HandwritingPopup: CenterPopup {
-    @Binding var glyph : String
-    var body: some View {
-        HandwritingSheet(trace: $glyph)
-            .environmentObject(AppState())
     }
 }

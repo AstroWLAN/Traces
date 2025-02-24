@@ -12,10 +12,10 @@ enum caseForm: String, CaseIterable, Equatable {
     case majuscule
 }
 
-struct HandwritingSheet: View {
+struct HandwritingSheet: CenterPopup {
     @Binding var trace: String
+    @State private var canvasView = PKCanvasView()
     @State private var selectedCase: caseForm = .minuscule
-    @EnvironmentObject private var appState: AppState
     var body: some View {
         ZStack {
             // Background
@@ -24,7 +24,7 @@ struct HandwritingSheet: View {
             // Sheet content
             ZStack {
                 // Handwriting canvas
-                HandwritingCanvas(symbol: $trace, selectedForm: $selectedCase)
+                HandwritingCanvas(symbol: $trace, selectedForm: $selectedCase, canvasView: $canvasView)
                 VStack {
                     HStack(alignment: .center) {
                         Spacer()
@@ -37,6 +37,9 @@ struct HandwritingSheet: View {
                         .fixedSize()
                         .pickerStyle(SegmentedPickerStyle())
                         .opacity(isGlyphDigit($trace) ? 0 : 1)
+                        .onChange(of: selectedCase) { _,_ in
+                            canvasView.drawing = PKDrawing()
+                        }
                         Spacer()
                     }
                     .padding(.top, 10)
@@ -45,7 +48,6 @@ struct HandwritingSheet: View {
                             Spacer()
                             // Sheet close button
                             Button(action: {
-                                appState.canvasFirstResponder.toggle()
                                 Task { await dismissAllPopups() }
                             }) {
                                 Image(systemName: "xmark.circle.fill")
@@ -66,13 +68,15 @@ struct HandwritingSheet: View {
         }
         .frame(width: 640, height: 540)
     }
+    func onDismiss() {
+        canvasView.resignFirstResponder()
+    }
 }
 
 struct HandwritingCanvas : View {
     @Binding var symbol : String
     @Binding var selectedForm : caseForm
-    // Creiamo un'istanza del canvas dove disegneremo
-    @State private var canvasView = PKCanvasView()
+    @Binding var canvasView : PKCanvasView
     
     // Tool picker è l'interfaccia che permette di selezionare gli strumenti di disegno
     @State private var toolPicker = PKToolPicker()
@@ -95,7 +99,6 @@ struct HandwritingCanvas : View {
             }
             .padding(80)
             DrawingView(canvasView: $canvasView, toolPicker: $toolPicker)
-                .environmentObject(AppState())
         }
     }
 }
@@ -105,7 +108,6 @@ struct DrawingView: UIViewRepresentable {
     // @Binding permette di ricevere riferimenti modificabili dalle proprietà
     @Binding var canvasView: PKCanvasView
     @Binding var toolPicker: PKToolPicker
-    @EnvironmentObject private var appState: AppState
     
     // Questa funzione viene chiamata quando la vista viene creata
     func makeUIView(context: Context) -> PKCanvasView {
@@ -121,19 +123,14 @@ struct DrawingView: UIViewRepresentable {
         toolPicker.addObserver(canvasView)
         
         // Facciamo diventare il canvas il first responder per ricevere gli input
-        DispatchQueue.main.async {
-            self.appState.canvasFirstResponder = true // Set directly instead of toggling
-            self.canvasView.becomeFirstResponder()
-        }
+        self.canvasView.becomeFirstResponder()
         return canvasView
     }
     
     // Questa funzione viene chiamata quando la vista deve essere aggiornata
     // Al momento non abbiamo bisogno di aggiornamenti specifici
     func updateUIView(_ uiView: PKCanvasView, context: Context) {
-        if !appState.canvasFirstResponder {
-            canvasView.resignFirstResponder()
-        }
+        
     }
 }
 

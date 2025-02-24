@@ -1,10 +1,10 @@
 [
     {
         "title": "Timeless Value of Handwriting",
-        "content": "The process of handwriting is important for the cognitive developmentt of learners of all ages. Especially in children, it not only improves memory, reading ability and critical thinking, but also promotes essential motor skills. Handwriting practice sharpens fine motor control, improves hand-eye coordination, and strengthens hand muscles."
+        "content": "The process of handwriting is important for the cognitive developmentt of learners of all ages. Especially in children, it not only improves memory, reading ability and critical thinking, but also promotes essential motor skills. Handwriting practice sharpens fine motor control, improves hand-eye coordination and strengthens hand muscles."
     },
     {
         "title": "Tracing Sheets",
-        "content": "Tracing sheets have long provided a structured method for children to refine their handwriting skills. By following guided letters and digits, they build muscle memory in their fingers and hands, reinforcing both precision and control. Traces reimagines this time-tested approach for the digital era, leveraging the Apple Pencil to retain all the benefits of tracing while minimizing paper waste. Looking ahead, future development could center on creating a neural network to classify each drawing input and offer personalized handwriting improvement suggestions. This would require assembling a robust training dataset that factors in various handwriting quality parameters, ensuring accurate and effective feedback."
+        "content": "Tracing sheets have long helped children refine their handwriting by building muscle memory and control. Traces modernizes this approach for the digital era with the Apple Pencil, reducing paper waste while retaining the benefits of tracing. Future developments could include a neural network that classifies each drawing input and offers personalized handwriting suggestions, using a robust dataset to ensure effective feedback."
     }
 ]

@@ -4,15 +4,15 @@
 
 import SwiftUI
 
-// Custom shaped outlines
-// Based on tutorial at: https://www.youtube.com/watch?v=98Nkp_zSEMk
+// Defines custom-shaped outlines
+// Based on the tutorial: https://www.youtube.com/watch?v=98Nkp_zSEMk
 extension View {
     func outline(color: Color, width: CGFloat) -> some View {
         modifier(StrokeOutline(size: width, color: color))
     }
 }
 
-// Defines a custom modifier for creating unique outline shapes
+// Implements a custom modifier for generating custom outline shapes
 struct StrokeOutline : ViewModifier {
     private let id = UUID()
     var size : CGFloat = 1
@@ -44,11 +44,12 @@ struct StrokeOutline : ViewModifier {
     }
 }
 
+// Root view
 struct Main: View {
     @State private var parsedAlphabet : [LetterJSON]?
-    @State private var parsedParagraphs : [ParsedParagraph]?
-    @StateObject private var appState = AppState()
+    @State private var parsedParagraphs : [ResearchParagraphJSON]?
     var body: some View {
+        // Navigation
         TabView {
             Tab("Alphabet", systemImage: "textformat") {
                 Alphabet(alphabet: $parsedAlphabet)
@@ -57,16 +58,15 @@ struct Main: View {
                 Digits()
             }
             Tab("Research", systemImage: "brain.filled.head.profile") {
-                Research(researchContent: $parsedParagraphs)
+                Research(research: $parsedParagraphs)
             }
         }
         .tabViewStyle(.tabBarOnly)
         .onAppear {
-            // Loads and parses the alphabet data from 'alphabet.json' file
+            // Reads and processes the alphabet data from the 'alphabet.json' file
             parsedAlphabet = parseAlphabetJSON(fileName: "alphabet") ?? [LetterJSON()]
-            parsedParagraphs = parseParagraphsJSON(fileName: "research") ?? [ParsedParagraph()]
+            // Reads and processes research data from the 'research.json' file
+            parsedParagraphs = parseResearchParagraphJSON(fileName: "research") ?? [ResearchParagraphJSON()]
         }
-        // Inject AppState into the environment for all child views
-        .environmentObject(appState)
     }
 }
