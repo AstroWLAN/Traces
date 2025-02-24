@@ -1,6 +1,7 @@
 // Traces.swift
 // Traces
 // Created by Dario Crippa on 17/02/25
+// Tested on an iPad Air (4th Generation) and within the Xcode Simulator
 
 import SwiftUI
 import MijickPopups

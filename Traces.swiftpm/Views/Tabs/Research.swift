@@ -15,6 +15,17 @@ struct Research: CenterPopup {
             HStack(alignment: .center, spacing: 60) {
                 Spacer()
                 ZStack {
+                    // Kid illustrations
+                    Image("KidLeft")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 280)
+                        .offset(x: -300)
+                    Image("KidRight")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 280)
+                        .offset(x: +300)
                     // Background
                     Color(.systemGray6)
                         .clipShape(RoundedRectangle(cornerRadius: 20))
@@ -28,11 +39,6 @@ struct Research: CenterPopup {
                         .padding(10)
                 }
                 .frame(maxWidth: 550, maxHeight: 650)
-                // Kid illustration
-                Image("Kid")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 280)
                 Spacer()
             }
             .toolbar {
@@ -40,7 +46,7 @@ struct Research: CenterPopup {
                     HStack {
                         Spacer()
                         Button(action: {
-                            // Presents the development information popup
+                            // Presents the DevelopmentPopup
                             Task { await DevelopmentPopup().present() }
                         }) {
                             Image(systemName: "info.circle.fill")

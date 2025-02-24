@@ -6,16 +6,16 @@ import SwiftUI
 import MijickPopups
 
 struct Alphabet: View {
-    // Parsed letters of the alphabet
+    // Alphabet letters extracted from 'alphabet.json'
     @Binding var alphabet : [LetterJSON]?
     
-    // Grid structure
+    // Defines the grid structure
     private let gridColumns = Array(repeating: GridItem(.flexible(minimum: 6), spacing: 0), count: 6)
     
     var body: some View {
         NavigationStack {
             ScrollView {
-                // Grid layout to visualize all the alphabet letters in an organized manner
+                // Creates a grid structure to visualize all the alphabet letters in an orderly manner
                 LazyVGrid(columns: gridColumns, alignment: .center, spacing: 40) {
                     ForEach(alphabet ?? [LetterJSON()], id: \.self) { letter in
                         Letter(parsedLetter: letter)
@@ -33,6 +33,7 @@ struct Letter : View {
     @State private var selectedLetter : String = String()
     var body: some View {
         ZStack {
+            // Letter
             Image(parsedLetter.word)
                 .resizable()
                 .scaledToFill()
@@ -53,13 +54,12 @@ struct Letter : View {
             }
             .padding(.bottom, 10)
         }
-        .background(Color(.systemGray6))
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(color: Color(.systemGray4), radius: 3)
         .onTapGesture {
-            // Displays the popup
             selectedLetter = parsedLetter.letter
-            Task { await HandwritingSheet(trace: $selectedLetter).present() }
+            // Presents the HandwritingPopup
+            Task { await HandwritingPopup(trace: $selectedLetter).present() }
         }
     }
 }
