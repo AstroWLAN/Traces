@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="Repo/Icon.png" alt="Icon" width="20%">
+  <img src="Repo/Icon.png" alt="Icon" width="40%">
 </div>
 
 ## Abstract 💭
